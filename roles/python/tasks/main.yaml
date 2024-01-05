@@ -1,0 +1,5 @@
+---
+- name: install pexpect
+  package:
+    name: python3-pexpect
+    state: present

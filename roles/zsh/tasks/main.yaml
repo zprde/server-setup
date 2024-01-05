@@ -1,0 +1,19 @@
+---
+- name: install zsh
+  ansible.builtin.package:
+    name: zsh
+    state: present
+
+- name: download oh-my-sh
+  get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp/oh-my-zsh-install.sh
+    mode: '744'
+
+- name: install oh-my-zsh
+  expect:
+    command: /tmp/oh-my-zsh-install.sh
+    responses:
+      "Do you want to change your default shell to zsh": "Y"
+    echo: true
+  ignore_errors: true
