@@ -1,14 +1,21 @@
 ---
+- name: Check oh my zsh status
+  stat:
+    path: ~/.oh-my-zsh
+  register: oh_my_zsh_dir
+
 - name: install zsh
   ansible.builtin.package:
     name: zsh
     state: present
+  when: not oh_my_zsh_dir.stat.exists
 
 - name: download oh-my-sh
   get_url:
     url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
     dest: /tmp/oh-my-zsh-install.sh
     mode: '744'
+  when: not oh_my_zsh_dir.stat.exists
 
 - name: install oh-my-zsh
   expect:
@@ -17,3 +24,4 @@
       "Do you want to change your default shell to zsh": "Y"
     echo: true
   ignore_errors: true
+  when: not oh_my_zsh_dir.stat.exists
